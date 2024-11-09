@@ -84,7 +84,7 @@ To maintain efficiency while adapting the model to multiple tasks, I decided to 
 
 The dataset contained a total of 11,914 reviews, each annotated with a corresponding sentiment label and class label. Due to time constraints, I trained the model on a subset of only 500 samples. Despite the limited training data, the model achieved the following performance:
 
-- **Sentiment Classification Accuracy**: 0.79
-- **Class Classification Accuracy**: 0.87
+- **Sentiment Classification Accuracy**: 0.74
+- **Class Classification Accuracy**: 0.89
 
 These results demonstrate the model's capability to learn and generalize even with a small dataset, though there is certainly room for improvement. Increasing the number of training samples would likely enhance the model's accuracy by allowing it to learn more robust features. Additionally, a more complex architecture could further improve performance by capturing finer details in the data.
