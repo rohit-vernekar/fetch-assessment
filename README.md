@@ -1,30 +1,6 @@
-# ML Apprenticeship Take-Home Assessment
+# Multihead Neural Network
 
-### Note on Trained Model
-
-Due to GitHub’s file size constraints, the trained model could not be uploaded directly to the repository. However, the trained model is included in the Docker image provided.
-
-
-## Setup and Installation
-
-1. **Clone the repository and Install dependencies:**
-   ```bash
-   git clone git@github.com:rohit-vernekar/fetch-assessment.git
-   cd fetch-assessment
-   
-   conda env create -f environment.yml
-   conda activate fetch
-   ```
-
-2. **Run with Docker:**
-   ```bash
-   docker pull rohitvernekar/fetch-assessment:latest
-   docker run -p 8888:8888 rohitvernekar/fetch-assessment:latest
-   ```
-    The container will output a URL with a token. Use this URL in browser to access the notebook.
----
-
-## Task 1: Sentence Transformer Implementation
+## Sentence Transformer Implementation
 
 For the sentence transformer implementation, I used the `distilbert-base-uncased` tokenizer and model from the Hugging Face Transformers library. DistilBERT is a compact version of BERT (Bidirectional Encoder Representations from Transformers), designed to be faster and lighter while retaining a high degree of performance. It has approximately 60% fewer parameters than BERT-base, making it computationally efficient without sacrificing too much accuracy.
 
@@ -42,7 +18,7 @@ For the sentence transformer implementation, I used the `distilbert-base-uncased
 
 ---
 
-## Task 2: Multi-Task Learning Expansion
+## Multi-Task Learning Expansion
 
 To expand the Sentence Transformer into a multi-task learning (MTL) setup, I defined two separate task-specific heads on top of the DistilBERT model:
 
@@ -57,7 +33,7 @@ To enable MTL, I added these two task-specific heads on top of the transformer b
 - **Independent Output Layers**: Each head’s output layer is specific to its task. This setup allows each head to learn features unique to its task while leveraging the shared transformer backbone for common sentence representation.
 
 ---
-## Task 3: Training Considerations
+## Training Considerations
 #### Freezing Strategy
 To maintain efficiency while adapting the model to multiple tasks, I decided to **freeze most of the layers in the transformer backbone**, keeping only a few layers trainable. Specifically:
 - I froze all layers **except for `layer.5.output_layer_norm` and `layer.5.ffn`** (Feed-Forward Network).
@@ -68,7 +44,7 @@ To maintain efficiency while adapting the model to multiple tasks, I decided to 
 - **Focused Adaptation**: By leaving only `layer.5.output_layer_norm` and `layer.5.ffn` trainable, we allow the model to adapt selectively. These specific layers are closer to the output, allowing them to fine-tune the shared representation for our specific tasks without extensively modifying the entire network, which could lead to overfitting or loss of generalization.
 
 ---
-## Task 4: Layer-wise Learning Rate Implementation
+## Layer-wise Learning Rate Implementation
 
 - **Task-Specific Heads**: I set a relatively higher learning rate (`1e-3`) for the sentiment classification and sentence classification heads, as these layers are newly added and need to be trained from scratch. A higher learning rate allows them to adapt quickly to the specific tasks.
 - **Unfrozen Transformer Layers**: For the selected transformer layers (`layer.5.output_layer_norm` and `layer.5.ffn`), I used a lower learning rate (`5e-5`). These layers are pre-trained but unfrozen to allow fine-tuning. A lower learning rate helps retain the pre-trained knowledge while slowly adapting the model for the multi-task setup.
